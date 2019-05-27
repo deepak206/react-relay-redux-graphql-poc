@@ -5,9 +5,10 @@ import environment from '../config/Environment';
 import Header from './Header';
 import { connect } from 'react-redux';
 import { number } from 'prop-types';
+import { pageReducer } from '../action/page-action';
 
 @connect(state => ({
-  pageList: state.PostReducer.get('pageList'),
+  pageList: state.pageReducer.pageList,
 }))
 
 class ListPage extends Component {
@@ -17,6 +18,7 @@ class ListPage extends Component {
 
   render() {
     const { pageList } = this.props;
+    console.log(pageList);
     return (
         <Fragment>  
       <Header/> 
@@ -48,6 +50,8 @@ class ListPage extends Component {
           }
           if (!props) {
             return <div>Loading...</div>
+          } else {
+            this.props.dispatch(pageReducer(props.allPosts)) 
           }
           return props.allPosts.map((node)=>(
           <tr>

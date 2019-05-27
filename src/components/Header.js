@@ -7,7 +7,7 @@ class Header extends Component {
   render() {
     return (
       <div>
-          <h2>React Relay POC</h2>
+          <h2>React Relay Redux POC</h2>
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <ul className="navbar-nav mr-auto">
             <li><Link to={'/'} className="nav-link"> Home </Link></li>
