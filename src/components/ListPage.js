@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { graphql, QueryRenderer } from 'react-relay'
+import { graphql, QueryRenderer, fetchQuery } from 'react-relay'
 import '../App.css'
 import environment from '../config/Environment';
 import Header from './Header';
@@ -16,14 +16,31 @@ class ListPage extends Component {
     pageList: number,
   }
 
+  
+  query = graphql`
+  query ListPageQuery {
+      allPosts {
+        id
+        title
+        text
+      }
+    }
+  `;
+
+  componentDidMount() {
+    fetchQuery(environment, this.query)
+    .then(data => {
+      this.props.dispatch(pageReducer(data.allPosts)) 
+    });
+  } 
+
   render() {
     const { pageList } = this.props;
-    console.log(pageList);
     return (
-        <Fragment>  
+      <Fragment>  
       <Header/> 
       <div className="list">
-      <table>
+      {/* <table>
         <tr>
             <th>User Id</th>
             
@@ -61,7 +78,21 @@ class ListPage extends Component {
           </tr>))
         }}
       />
-      </table>
+      </table> */}
+        <table>
+          <tr>
+              <th>User Id</th>              
+              <th>User Title</th>
+              <th>User Text</th>
+          </tr>
+          {pageList.length && pageList.map((node)=>(
+            <tr>
+              <td>{node.id}</td>
+              <td>{node.title}</td>
+              <td>{node.text} </td>
+            </tr>
+          ))}
+        </table>
       </div>
       </Fragment>
     )

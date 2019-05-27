@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 
 class CreatePage extends Component {
 
+
   state = {
     title: '',
     text: '',
@@ -39,19 +40,20 @@ class CreatePage extends Component {
                 <div style={{textAlign: "center", color: "red"}}>
                 </div>
                 <table>
-                <tr>
-                    <th>User Id</th>
-                    
-                    <th>User Title</th>
-                    <th>User Text</th>
-                </tr>
-                {pageList.length && pageList.map((node)=>(
-              <tr>
-                <td>{node.id}</td>
-                <td>{node.title}</td>
-                <td>{node.text} </td>
-                    </tr>))}
-                </table>
+                  <tr>
+                      <th>User Id</th>
+                      
+                      <th>User Title</th>
+                      <th>User Text</th>
+                  </tr>
+                  {pageList.length && pageList.map((node)=>(
+                    <tr>
+                      <td>{node.id}</td>
+                      <td>{node.title}</td>
+                      <td>{node.text} </td>
+                    </tr>
+                  ))}
+              </table>
         </div>    
 
         
