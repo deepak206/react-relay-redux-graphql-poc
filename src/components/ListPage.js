@@ -5,7 +5,8 @@ import environment from '../config/Environment';
 import Header from './Header';
 import { connect } from 'react-redux';
 import { number } from 'prop-types';
-import { pageReducer } from '../action/page-action';
+import { pageReducer, deleteListItem } from '../action/page-action';
+import DeletePostMutation from '../mutations/DeletePostMutation';
 
 @connect(state => ({
   pageList: state.pageReducer.pageList,
@@ -26,6 +27,10 @@ class ListPage extends Component {
       }
     }
   `;
+  
+  _handleDelete = (id) => {
+    DeletePostMutation(id,  () => this.props.dispatch(deleteListItem(id)));
+  };
 
   componentDidMount() {
     fetchQuery(environment, this.query)
@@ -84,12 +89,18 @@ class ListPage extends Component {
               <th>User Id</th>              
               <th>User Title</th>
               <th>User Text</th>
+              <th>Action</th>
           </tr>
           {pageList.length && pageList.map((node)=>(
             <tr>
               <td>{node.id}</td>
               <td>{node.title}</td>
               <td>{node.text} </td>
+              <td>
+                <button className="red f6 pointer dim" onClick={(id) => this._handleDelete(node.id)}>
+                Delete
+                </button>
+              </td>
             </tr>
           ))}
         </table>
