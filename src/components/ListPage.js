@@ -16,11 +16,10 @@ class ListPage extends Component {
   static propTypes = {
     pageList: number,
   }
-
   
   query = graphql`
-  query ListPageQuery {
-      allPosts {
+  query ListPageQuery($after: String, $first: Int!) {
+      allPosts(orderBy: createdAt_DESC, after: $after, first: $first) {
         id
         title
         text
@@ -32,8 +31,14 @@ class ListPage extends Component {
     DeletePostMutation(id,  () => this.props.dispatch(deleteListItem(id)));
   };
 
+
   componentDidMount() {
-    fetchQuery(environment, this.query)
+    
+    const variables = {
+      after: 'cjw0d8dsd097y0183u6b80p9c',
+      first: 10
+    };
+    fetchQuery(environment, this.query, variables)
     .then(data => {
       this.props.dispatch(pageReducer(data.allPosts)) 
     });
