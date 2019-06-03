@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { number } from 'prop-types';
 import { pageReducer, deleteListItem } from '../action/page-action';
 import DeletePostMutation from '../mutations/DeletePostMutation';
+import ReactPaginate from 'react-paginate';
 
 @connect(state => ({
   pageList: state.pageReducer.pageList,
@@ -14,12 +15,18 @@ import DeletePostMutation from '../mutations/DeletePostMutation';
 
 class ListPage extends Component {
   static propTypes = {
-    pageList: number,
-  }
-  
+    pageList: number,    
+    perPage: number.isRequired
+  };
+
+  state = {
+    pageCount: 0,
+    selected: 0
+  };
+
   query = graphql`
-  query ListPageQuery($after: String, $first: Int!) {
-      allPosts(orderBy: createdAt_DESC, after: $after, first: $first) {
+  query ListPageQuery {
+      allPosts(orderBy: createdAt_DESC) {
         id
         title
         text
@@ -35,14 +42,19 @@ class ListPage extends Component {
   componentDidMount() {
     
     const variables = {
-      after: 'cjw0d8dsd097y0183u6b80p9c',
-      first: 10
+      // after: 'cjw0d8dsd097y0183u6b80p9c',
+      // first: 10
     };
-    fetchQuery(environment, this.query, variables)
+    fetchQuery(environment, this.query)
     .then(data => {
+      this.setState({pageCount: Math.ceil(data.allPosts.length/10)})
       this.props.dispatch(pageReducer(data.allPosts)) 
     });
   } 
+
+  handlePageClick = data => {
+    this.setState({selected: data.selected});
+  };
 
   render() {
     const { pageList } = this.props;
@@ -50,6 +62,21 @@ class ListPage extends Component {
       <Fragment>  
       <Header/> 
       <div className="list">
+      {pageList.length &&
+      <ReactPaginate
+          previousLabel={'previous'}
+          nextLabel={'next'}
+          breakLabel={'...'}
+          breakClassName={'break-me'}
+          pageCount={this.state.pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={this.handlePageClick}
+          containerClassName={'pagination'}
+          subContainerClassName={'pages pagination'}
+          activeClassName={'active'}
+        />
+      }
       {/* <table>
         <tr>
             <th>User Id</th>
@@ -96,7 +123,7 @@ class ListPage extends Component {
               <th>User Text</th>
               <th>Action</th>
           </tr>
-          {pageList.length && pageList.map((node)=>(
+          {pageList.length && pageList.slice(this.state.selected*10, (this.state.selected + 1)*10).map((node)=>(
             <tr>
               <td>{node.id}</td>
               <td>{node.title}</td>

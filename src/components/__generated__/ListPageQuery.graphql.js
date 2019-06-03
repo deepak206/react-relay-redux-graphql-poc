@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 9215fbea5332a3a1c3515fe22bc86138
+ * @relayHash d7cca419d2d75756e1ca555e2af597ec
  */
 
 /* eslint-disable */
@@ -26,7 +26,7 @@ export type ListPageQuery = {|
 
 /*
 query ListPageQuery {
-  allPosts {
+  allPosts(orderBy: createdAt_DESC) {
     id
     title
     text
@@ -40,8 +40,14 @@ var v0 = [
     "kind": "LinkedField",
     "alias": null,
     "name": "allPosts",
-    "storageKey": null,
-    "args": null,
+    "storageKey": "allPosts(orderBy:\"createdAt_DESC\")",
+    "args": [
+      {
+        "kind": "Literal",
+        "name": "orderBy",
+        "value": "createdAt_DESC"
+      }
+    ],
     "concreteType": "Post",
     "plural": true,
     "selections": [
@@ -89,11 +95,11 @@ return {
     "operationKind": "query",
     "name": "ListPageQuery",
     "id": null,
-    "text": "query ListPageQuery {\n  allPosts {\n    id\n    title\n    text\n  }\n}\n",
+    "text": "query ListPageQuery {\n  allPosts(orderBy: createdAt_DESC) {\n    id\n    title\n    text\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'cf33eb34efe95950ae5fa159b29ee836';
+(node/*: any*/).hash = '4ae8b1a60dd2c2622df0002588743389';
 module.exports = node;

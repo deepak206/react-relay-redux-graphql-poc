@@ -2,18 +2,23 @@ import React, {Component, Fragment} from 'react';
 import CreatePostMutation from '../mutations/CreatePostMutation';
 import Header from './Header';
 import { connect } from 'react-redux';
+import ReactPaginate from 'react-paginate';
 
 @connect(state => ({
   pageList: state.pageReducer.pageList,
 }))
 
 class CreatePage extends Component {
-
-
   state = {
     title: '',
     text: '',
+    pageCount: 0,
+    selected: 0
   }
+
+  handlePageClick = data => {
+    this.setState({selected: data.selected});
+  };
 
   render () {
     const { pageList } = this.props;
@@ -39,6 +44,21 @@ class CreatePage extends Component {
                 <button className='button' onClick={() => this._handlePost()}>Post</button>
                 <div style={{textAlign: "center", color: "red"}}>
                 </div>
+                {pageList.length &&
+                <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'break-me'}
+                    pageCount={pageList.length/10}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={this.handlePageClick}
+                    containerClassName={'pagination'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                  />
+                }
                 <table>
                   <tr>
                       <th>User Id</th>
@@ -46,7 +66,7 @@ class CreatePage extends Component {
                       <th>User Title</th>
                       <th>User Text</th>
                   </tr>
-                  {pageList.length && pageList.map((node)=>(
+                  {pageList.length && pageList.slice(this.state.selected*10, (this.state.selected + 1)*10).map((node)=>(
                     <tr>
                       <td>{node.id}</td>
                       <td>{node.title}</td>
