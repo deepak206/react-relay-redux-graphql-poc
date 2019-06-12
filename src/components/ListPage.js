@@ -33,7 +33,7 @@ class ListPage extends Component {
       }
     }
   `;
-  
+
   _handleDelete = (id) => {
     DeletePostMutation(id,  () => this.props.dispatch(deleteListItem(id)));
   };
@@ -60,7 +60,7 @@ class ListPage extends Component {
     const { pageList } = this.props;
     return (
       <Fragment>  
-      <Header/> 
+      <Header/>
       <div className="list">
       {pageList.length &&
       <ReactPaginate
