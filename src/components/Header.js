@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import '../App.css';
-import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import {withRouter} from "react-router-dom";
 import { Link } from 'react-router-dom';
 
 class Header extends Component {
@@ -26,18 +24,16 @@ class Header extends Component {
             <li><Link to={'/ListPage'} className="nav-link">List All Page</Link></li>
           </ul>
         </nav>
-          <hr />
-          
+          <hr />          
         <Paper elevation={0}>
           <Breadcrumbs aria-label="Breadcrumb">
-            <Link color="inherit" href="/" onClick={this.handleClick}>
+            <Link color="inherit" to="/" onClick={this.handleClick}>
               Material-UI
             </Link>
             <Typography color="textPrimary">{window.location.pathname.replace("/","")}</Typography>          
           </Breadcrumbs>
         </Paper>
-      </div>
-      
+      </div>      
     )
   }
 }

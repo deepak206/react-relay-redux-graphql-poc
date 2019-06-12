@@ -8,32 +8,29 @@ const pageReducer = (state = initialState, {
     type, payload,
   }) => {
     switch (type) {
-        case FETCH_PAGE_LIST:
-          return {
-            ...state,
-            pageList: payload,
-          };
+      case FETCH_PAGE_LIST:
+        return {
+          ...state,
+          pageList: payload,
+        };
 
-        case DELETE_LIST_ITEM:
-          let removekey = '';
-          state.pageList.filter((value, key)=> {
-            if(value.id == payload) {
-              removekey = key;
-            }
-          });
+      case DELETE_LIST_ITEM:
+        const index = state.pageList.findIndex(function(o){
+          return o.id === payload;
+        });
 
-          let list = [...state.pageList];
-          list.splice(removekey,1);
+        let list = [...state.pageList];
+        list.splice(index,1);
 
-         return {
-           ...state,
-           pageList: list
-         }
-         
-        default:
-            return state;
-
+        return {
+          ...state,
+          pageList: list
         }
+        
+      default:
+        return state;
+    }
   };
 
   export default pageReducer;
+  

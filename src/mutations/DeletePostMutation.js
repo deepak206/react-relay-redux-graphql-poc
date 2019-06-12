@@ -3,14 +3,13 @@ import {
     graphql,
   } from 'react-relay';
 import environment from '../config/Environment';
-import { ConnectionHandler } from "relay-runtime";
 
 const mutation = graphql`
     mutation DeletePostMutation($id: ID!) {
-    deletePost(id: $id) {
-    id
+      deletePost(id: $id) {
+        id
+      }
     }
-}
 `;
   
 export default function DeletePostMutation(id, callback) {
