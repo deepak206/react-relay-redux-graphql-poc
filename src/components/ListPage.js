@@ -1,22 +1,17 @@
 import React, { Component, Fragment } from 'react'
-import { graphql, QueryRenderer, fetchQuery } from 'react-relay'
+import { graphql, fetchQuery } from 'react-relay'
 import '../App.css'
 import environment from '../config/Environment';
 import Header from './Header';
 import { connect } from 'react-redux';
-import { number } from 'prop-types';
+import { array } from 'prop-types';
 import { pageReducer, deleteListItem } from '../action/page-action';
 import DeletePostMutation from '../mutations/DeletePostMutation';
 import ReactPaginate from 'react-paginate';
 
-@connect(state => ({
-  pageList: state.pageReducer.pageList,
-}))
-
 class ListPage extends Component {
   static propTypes = {
-    pageList: number,    
-    perPage: number.isRequired
+    pageList: array
   };
 
   state = {
@@ -25,7 +20,7 @@ class ListPage extends Component {
   };
 
   query = graphql`
-  query ListPageQuery {
+    query ListPageQuery {
       allPosts(orderBy: createdAt_DESC) {
         id
         title
@@ -40,11 +35,6 @@ class ListPage extends Component {
 
 
   componentDidMount() {
-    
-    const variables = {
-      // after: 'cjw0d8dsd097y0183u6b80p9c',
-      // first: 10
-    };
     fetchQuery(environment, this.query)
     .then(data => {
       this.setState({pageCount: Math.ceil(data.allPosts.length/10)})
@@ -58,6 +48,22 @@ class ListPage extends Component {
 
   render() {
     const { pageList } = this.props;
+    const salesItem = pageList.length && pageList.length ? (
+      pageList.map((node) => (
+        <tr key={node.id}>
+          <td>{ node.id }</td>
+          <td>{ node.title }</td>
+          <td>{ node.text }</td>
+        </tr>
+      ))
+    ) : (
+      <tr key={'NotFound'}>
+        <td colSpan="3" align="center">
+            No Record found
+        </td>
+      </tr>
+    )
+
     return (
       <Fragment>  
       <Header/>
@@ -117,24 +123,16 @@ class ListPage extends Component {
       />
       </table> */}
         <table>
-          <tr>
-              <th>User Id</th>              
+          <thead>
+            <tr>
+              <th>User Id</th>
               <th>User Title</th>
               <th>User Text</th>
-              <th>Action</th>
-          </tr>
-          {pageList.length && pageList.slice(this.state.selected*10, (this.state.selected + 1)*10).map((node)=>(
-            <tr>
-              <td>{node.id}</td>
-              <td>{node.title}</td>
-              <td>{node.text} </td>
-              <td>
-                <button className="red f6 pointer dim" onClick={(id) => this._handleDelete(node.id)}>
-                Delete
-                </button>
-              </td>
             </tr>
-          ))}
+          </thead>
+          <tbody>
+            { salesItem }
+          </tbody>
         </table>
       </div>
       </Fragment>
@@ -142,4 +140,12 @@ class ListPage extends Component {
   }
 }
 
-export default ListPage;
+const mapStateToProps = ({
+  pageReducer: {
+    pageList,
+  },
+}) => ({
+  pageList,
+});
+
+export default connect(mapStateToProps)(ListPage);
